@@ -1,0 +1,73 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Beer Distribution Game</title>
+  <link rel="stylesheet" href="../static/index.css">
+  <script src="https://cdn.socket.io/3.1.1/socket.io.min.js" integrity="sha384-gDaozqUvc4HTgo8iZjwth73C6dDDeOJsAgpxBcMpZYztUfjHXpzrpdrHRdVp8ySO" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" charset="utf-8">
+      var socket = io();
+      socket.on('connect', function() {
+          socket.emit('my event', {data: 'I\'m connected!'});
+      });
+      socket.on('message', function(data){
+          console.log(data);
+          console.log('Received!');
+      })
+  </script>
+</head>
+<body>
+    <section class="section-1">
+        <div class="section-1-wrapper">
+            <h1 class="title">
+
+                The Beer Game
+            </h1>
+            <div class="info-box standard-text">
+                <p class="">Interactively learn about the bullwhip effect in supply chain management <br>
+                click <a href="./player-login">here</a> if your instructor has given you a password<br> click <a href="practice-game">here</a> 
+                to play with a random group <br>
+                <a href="./instructor-login">Instructor Login</a> or <a href="./register.html">sign up</a> 
+                </p>    
+            </div>
+        </div>
+    </section>
+    <section class="section-2">
+        <div class="content-wrapper">
+
+            <div class="section-img">
+                <img src="../static/img/beer_img.png" alt="">
+            </div>
+            <h1 class="title s2-title">
+                How to Play
+            </h1>
+            <p class="standard-text">
+                    The beer game is based on supply chain and involves 4 players where each
+                    player represents one of the four stages in the chain i.e the retailer, the man-
+                    ufacturer, the wholesaler, the consumer.<br><br>
+                    Every week the retailer receives orders from the consumer without any time
+                    delay. The retailer fulfills as many unit of beer order as it can and then cal-
+                    culates the number of units that are required based on the total number of
+                    stocks left in the inventory, the cost of each beer, and the backlog.
+                    After some time delay, the retailer places an order to the wholesaler. The
+                    wholesaler tries to fulfill the demand of the retailer and estimates how much
+                    beer is needed. The wholesaler places an order to the distributor if he senses
+                    he is in need of more stocks. This process is repeated with the manufacturer
+                    as well.<br><br>
+                    Lastly, the manufacturer begins production according to the order demand.
+                    When the production is over, the beer is send backwards to the distributor,
+                    then from the distributor to the wholesaler, retailer, and finally to the con-
+                    sumer. There are time delays in each step during the downstream process,
+                    except between the retailer and consumer.
+            </p>
+        </div>
+
+
+
+
+    </section>
+</body>
+</html>

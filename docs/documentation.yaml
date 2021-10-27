@@ -1,0 +1,315 @@
+---
+openapi: 3.0.0
+info:
+  title: Beer Game API
+  description: |
+    Group 21 Software Engineering project
+    [http://swagger.io](http://swagger.io) or on
+    [irc.freenode.net, #swagger](http://swagger.io/irc/).
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://petstore.swagger.io/v2
+tags:
+- name: instructor
+  description: Operations about the instructor
+- name: player
+  description: Operations about the player
+paths:
+  /auth/signup:
+    post:
+      tags:
+      - instructor
+      summary: Add a new instructor to the database
+      description: |
+        Adds a new instructor to the database based on the request body, containing a username and a password. The result is relayed as both a status code, and in the  response body, following the schema documented here. After registration, a cookie is set for the instructor. Cookies are set automatically as a set-cookie header, but also included in the
+          response body
+      operationId: registerInstructor
+      requestBody:
+        description: credentials for new instructor creation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+        required: true
+      responses:
+        "405":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authentication_response'
+        "200":
+          description: |
+            Successfully Authenticated The session id is returned in a cookie named `SEG21AUTHINSTRUCTOR`
+          headers:
+            Set-Cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: SEG21AUTHINSTRUCTOR=abcde12345;Path=/
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authentication_response'
+  /auth/register:
+    post:
+      tags:
+      - instructor
+      description: |
+        Authenticates an existing instructor in the database based on the input given in the request body, result is relayed via error code and in the response body. Cookies are set automatically as a set-cookie header, but also included in the response body
+      operationId: authenticateInstructor
+      requestBody:
+        description: the instructor's credentials
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_1'
+        required: true
+      responses:
+        "405":
+          description: Invalid input or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authentication_response'
+        "200":
+          description: |
+            Successfully Authenticated The session id is returned in a cookie named `SEG21AUTHINSTRUCTOR`
+          headers:
+            Set-Cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: SEG21AUTHINSTRUCTOR=abcde12345;Path=/
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authentication_response'
+  /auth/player:
+    post:
+      tags:
+      - player
+      summary: authenticates the player who sends the password to this endpoint,
+      operationId: authenticatePlayer
+      requestBody:
+        description: the password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_2'
+        required: true
+      responses:
+        "405":
+          description: Invalid player password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authentication_response'
+        "410":
+          description: the password is already in use
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authentication_response'
+        "200":
+          description: |
+            Successfully Authenticated The session id is returned in a cookie named `SEG21AUTHPLAYER`
+          headers:
+            Set-Cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: SEG21AUTHPLAYER=abcde12345;Path=/
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authentication_response_player'
+  /instructor/create_game:
+    post:
+      tags:
+      - instructor
+      summary: authenticate a player
+      operationId: create_game
+      requestBody:
+        description: the game parameters (not currently functional)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_3'
+        required: true
+      responses:
+        "405":
+          description: An error occurred
+        "200":
+          description: |
+            Game successfuly created
+          headers:
+            Set-Cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: SEG21AUTHINSTRUCTOR=abcde12345;Path=/
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/game_response'
+      security:
+      - cookieAuthInstructor: []
+  /instructor/delete_game:
+    post:
+      tags:
+      - instructor
+      summary: deletes a game
+      description: "This operation can also be done using a 'DELETE' http verb, if you manage to include a request body deletes an existing game instance, provided that\n  - the game instance exists\n  - the instructor is the owner of the game he wishes to delete\n  - the instructor is already authenticated \n"
+      operationId: delete_game
+      requestBody:
+        description: the game id to delete
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_4'
+        required: true
+      responses:
+        "400":
+          description: bad request, check response body for further details
+        "405":
+          description: method not allowed, the instructor is not the game owner
+        "200":
+          description: |
+            Game successfully deleted
+          headers:
+            Set-Cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: SEG21AUTHINSTRUCTOR=abcde12345;Path=/
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      security:
+      - cookieAuthInstructor: []
+components:
+  schemas:
+    authentication_response:
+      type: object
+      properties:
+        session_id:
+          type: string
+        status:
+          type: integer
+        description:
+          type: string
+        cookie:
+          $ref: '#/components/schemas/authentication_response_cookie'
+    authentication_response_player:
+      type: object
+      properties:
+        session_id:
+          type: string
+          nullable: true
+        game_id:
+          type: integer
+          nullable: true
+        player_id:
+          type: integer
+          nullable: true
+        status:
+          type: integer
+        description:
+          type: string
+        cookie:
+          $ref: '#/components/schemas/authentication_response_cookie'
+    game_response:
+      type: object
+      properties:
+        game_id:
+          type: integer
+        passwords:
+          $ref: '#/components/schemas/game_response_passwords'
+        params:
+          $ref: '#/components/schemas/game_response_params'
+    body:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+    body_1:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+    body_2:
+      type: object
+      properties:
+        password:
+          type: string
+    body_3:
+      type: object
+      properties:
+        wip:
+          type: string
+    body_4:
+      type: object
+      properties:
+        game_id:
+          type: integer
+    inline_response_200:
+      type: object
+      properties:
+        success:
+          type: boolean
+    authentication_response_cookie:
+      type: object
+      properties:
+        expires:
+          type: string
+        path:
+          type: string
+    game_response_passwords:
+      type: object
+      properties:
+        distributor:
+          type: string
+        factory:
+          type: string
+        wholesaler:
+          type: string
+          nullable: true
+        retailer:
+          type: string
+          nullable: true
+      description: Passwords for each player
+    game_response_params:
+      type: object
+      properties:
+        WIP:
+          type: string
+          description: this is a work in progress documentation
+  securitySchemes:
+    cookieAuthInstructor:
+      type: apiKey
+      name: SEG21AUTHINSTRUCTOR
+      in: cookie
+    cookieAuthPlayer:
+      type: apiKey
+      name: SEG21AUTHPLAYER
+      in: cookie

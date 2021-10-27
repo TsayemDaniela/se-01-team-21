@@ -1,0 +1,81 @@
+*, *::after, *::before{
+    box-sizing: border-box;
+}
+body { margin: 0; padding: 0; }
+.section-1{
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    background-image: url("../static/img/Beer-Manufacturing.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+
+}
+a{
+    color: #fffada;
+    font-weight: 800;
+}
+.section-1-wrapper{
+    max-width: 1336px;
+    margin: 0 auto;
+    height: 100%;   
+
+}
+.title{
+    padding-top: 10%;
+    margin-top: 0px;
+    font-size: 80px;
+    text-align:center;
+
+}
+
+.info-box{
+   position: absolute;
+    max-width: 500px;
+    padding: 5px 15px 5px 15px;
+   left: 50%;
+   top: 60%;
+   margin-left: 15px;
+   background-color:  #351E10;
+
+
+}
+.standard-text{
+    border-radius: 15px;
+    font-size: 22px;
+    font-weight: 400;
+    font-family: Futura;
+    color:  #fffada;
+}
+
+.section-2{
+    background-color: #351E10;
+    width: 100%;
+    height: auto;
+    min-height: 600px;
+    padding-bottom: 30px;
+
+}
+.content-wrapper{
+    max-width: 1336px;
+    margin: 0 auto;
+}
+
+.section-img{
+    width: 400px;
+    height: auto;
+    margin: -100px auto;
+    
+}
+.section-img img{
+    width: 100%;
+    height: 100%;
+}
+.s2-title{
+    font-family: Futura;
+    color:  #fffada;
+    padding-top: 75px;
+    margin-bottom: 15px;
+}
